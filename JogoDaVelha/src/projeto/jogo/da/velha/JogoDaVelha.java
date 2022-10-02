@@ -4,21 +4,37 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class JogoDaVelha {
+
     static int i;
     static int j;
-    static Scanner sc = new Scanner(System.in);
+   static Scanner sc = new Scanner(System.in);
     final static String PLAYER_1 = "\t X";
     final static String PLAYER_2 = "\t O";
 
     public static void main(String[] args) {
+        saudacao();
         String[][] jogo = new String[5][5];
-        //menu inicial
-        //regras
-        //inicio do jogo
-        System.out.println("INSIRA O NOME DO JOGADOR 1: ");
-        String player1 = sc.next();
-        System.out.println("INSIRA O NOME DO JOGADOR 2: ");
-        String player2 = sc.next();
+       menu();
+
+        int opcao = sc.nextInt();
+
+        switch (opcao) {
+            case 1:
+                tabuleiroRegras();
+
+            case 2:
+                System.out.print("Qual é o nome do primeiro jogador? ");
+                String player1 = sc.next();
+
+                System.out.print("Qual é o nome do segundo jogador? ");
+                String player2 = sc.next();
+
+                break;
+            case 3:
+                System.out.print("Até Logo!");
+                break;
+        }
+
 
         tabuleiro(jogo);
         printTabuleiro(jogo);
@@ -29,11 +45,12 @@ public class JogoDaVelha {
     public static void tabuleiro(String[][] jogo){   //construção do tabuleiro
         for (int i = 0; i < jogo.length; i++) {
             for (int j = 0; j < jogo.length; j++) {
+
                 if (j == 1 || j==3) {
                     jogo[i][j] = "\t|";
-                } else if(i == 1 || i ==3) {
+                }else if(i == 1 || i ==3) {
                     jogo[i][j] = "\t---";
-                } else jogo[i][j] = "\t";
+                } else jogo[i][j] = "";
             }
         }
 
@@ -66,13 +83,13 @@ public class JogoDaVelha {
         else
             return false;
     }
-    public static String[] posicoesDisponiveis(String[] posicoes, String coordenada) {
-        for (i = 0; i < posicoesDisponiveis.length; i++) {
-            if (posicoesDisponiveis[i].equals(coordenada))
-                posicoesDisponiveis[i] = "";
-        }
-        return posicoesDisponiveis;
-    }
+//    public static String[] posicoesDisponiveis(String[] posicoes, String coordenada) {
+//        for (i = 0; i < posicoesDisponiveis.length; i++) {
+//            if (posicoesDisponiveis[i].equals(coordenada))
+//                posicoesDisponiveis[i] = "";
+//        }
+//        return posicoesDisponiveis;
+   // }
     public static void jogadas(String[][] jogo, String nome1, String nome2) {
         int numRodada = 1;
         String vez = PLAYER_1;
@@ -141,9 +158,38 @@ public class JogoDaVelha {
     }
 
 
-}
 
+
+    private static void saudacao () {
+        System.out.println("*** Bem vindo ao jogo da velha. Divirta-se!***");
+    }
+    private static void menu() {
+        System.out.print("Você gostaria de iniciar uma partida? \n" +
+                "Digite 1 para regras; \n" +
+                "Digite 2 para iniciar o jogo;\n" +
+                "digite 3 para sair.");
 
 
     }
-}
+    private static void tabuleiroRegras() {
+
+
+        String[][] tabuleiro = {{" A ", "|", " B ", "|", " C \n"},
+                {"--- ", "", "--- ", "", "---\n"},
+                {" D ", "|", " E ", "|", " F \n"},
+                {"--- ", "", "--- ", "", "---\n"},
+                {" G ", "|", " H ", "|", " I \n"}};
+
+        for (int i = 0; i < tabuleiro.length; i++) {
+            int j;
+            for (j = 0; j < tabuleiro.length; j++) {
+
+                System.out.print(tabuleiro[i][j]);
+            }
+
+        }
+        System.out.println("Na sua vez de jogar, você deve digitar qual letra corresponde ao espaço que você quer ocupar.\n");
+    }
+
+    }
+
