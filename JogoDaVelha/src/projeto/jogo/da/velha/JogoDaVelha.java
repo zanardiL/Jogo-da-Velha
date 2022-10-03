@@ -8,8 +8,8 @@ public class JogoDaVelha {
     static int i;
     static int j;
    static Scanner sc = new Scanner(System.in);
-    final static String PLAYER_1 = "\t X";
-    final static String PLAYER_2 = "\t O";
+    final static String player1 = "\t X";
+    final static String player2 = "\t O";
 
     public static void main(String[] args) {
         saudacao();
@@ -38,7 +38,7 @@ public class JogoDaVelha {
 
         tabuleiro(jogo);
         printTabuleiro(jogo);
-        jogadas(jogo, player1, player2);
+       jogadas(jogo, player1, player2);
 
     }
 
@@ -48,7 +48,7 @@ public class JogoDaVelha {
 
                 if (j == 1 || j==3) {
                     jogo[i][j] = "\t|";
-                }else if(i == 1 || i ==3) {
+                }else if(i == 1 || i == 3) {
                     jogo[i][j] = "\t---";
                 } else jogo[i][j] = "";
             }
@@ -92,7 +92,7 @@ public class JogoDaVelha {
    // }
     public static void jogadas(String[][] jogo, String nome1, String nome2) {
         int numRodada = 1;
-        String vez = PLAYER_1;
+        String vez = player1;
         String[] posicoesDisponiveis = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
         do {
             System.out.println("\n Vez da rodada: " + vez);
@@ -149,10 +149,10 @@ public class JogoDaVelha {
                     System.out.println("Posição inválida!");
                     //inserir posições disponíveis
             }
-            if(vez.equals(PLAYER_1)) {
-                vez = PLAYER_2;
+            if(vez.equals(player1)) {
+                vez = player2;
             } else {
-                vez = PLAYER_1;
+                vez = player1;
             }
         } while (verificaVencedor(jogo));
     }
