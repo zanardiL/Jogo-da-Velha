@@ -4,7 +4,7 @@ public class JogoDaVelha {
 
     static int i;
     static int j;
-    static Scanner sc = new Scanner(System.in);
+   static Scanner sc = new Scanner(System.in);
     final static String PLAYER_1 = "\tX";
     final static String PLAYER_2 = "\tO";
 
