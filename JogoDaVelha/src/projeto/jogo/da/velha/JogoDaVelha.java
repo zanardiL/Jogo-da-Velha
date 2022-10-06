@@ -1,43 +1,61 @@
 package projeto.jogo.da.velha;
+
 import java.util.Scanner;
+
 public class JogoDaVelha {
 
     static int i;
     static int j;
-   static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
     final static String PLAYER_1 = "\tX";
     final static String PLAYER_2 = "\tO";
 
     public static void main(String[] args) {
         String nomePlayer1 = "";
         String nomePlayer2 = "";
+        int scoreUm = 0;
+        int scoreDois = 0;
+        int numRodada = 0;
+        String vencedorRodada = "";
 
         saudacao();
         String[][] jogo = new String[5][5];
         menu();
 
         int opcao = sc.nextInt();
+do {
+    switch (opcao) {
+        case 1:
+            tabuleiroRegras();
+        case 2:
+            rodarJogo(jogo, nomePlayer1, nomePlayer2);
+            break;
+        case 3:
+            System.out.print("Até Logo!");
+            break;
+        default:
+            System.out.println("Opção inválida, digite novamente:");
+            sc.next();
+    }
+}while(false);
 
-        switch (opcao) {
-            case 1:
-                tabuleiroRegras();
-            case 2:
-                rodarJogo(jogo, nomePlayer1, nomePlayer2);
-                break;
-            case 3:
-                System.out.print("Até Logo!");
-                break;
-        }
+
+        tabuleiro(jogo);
+        printTabuleiro(jogo);
+        rodarJogo(jogo, nomePlayer1, nomePlayer2);
+        campeao(numRodada, nomePlayer1, nomePlayer2, jogo, vencedorRodada);
+        placar(scoreUm, scoreDois, vencedorRodada, nomePlayer1, nomePlayer2);
     }
 
-    public static void tabuleiro(String[][] jogo){   //construção do tabuleiro
+
+    public static void tabuleiro(String[][] jogo) {   //construção do tabuleiro
         for (i = 0; i < jogo.length; i++) {
             for (j = 0; j < jogo.length; j++) {
-                if ((j == 1 || j==3) && i%2 == 0) {
+                if ((j == 1 || j == 3) && i % 2 == 0) {
                     jogo[i][j] = "\t|";
-                } else if((i == 1 || i ==3)&& j==0) {
+                } else if ((i == 1 || i == 3) && j == 0) {
                     jogo[i][j] = "\t--";
-                } else if(i == 1 || i ==3) {
+                } else if (i == 1 || i == 3) {
                     jogo[i][j] = "----";
                 } else jogo[i][j] = "\t";
             }
@@ -52,28 +70,30 @@ public class JogoDaVelha {
             System.out.println();
         }
     }
+
     public static boolean verificaVencedor(String[][] jogo) {
-        if(jogo[0][0].equals(jogo[0][2]) && jogo[0][0].equals(jogo[0][4]) && !jogo[0][0].equals("\t")) //A=B=C e !=vazio
+        if (jogo[0][0].equals(jogo[0][2]) && jogo[0][0].equals(jogo[0][4]) && !jogo[0][0].equals("\t")) //A=B=C e !=vazio
             return true;
-        else if(jogo[2][0].equals(jogo[2][2]) && jogo[2][0].equals(jogo[2][4]) && !jogo[2][0].equals("\t")) //D=E=F e !=vazio
+        else if (jogo[2][0].equals(jogo[2][2]) && jogo[2][0].equals(jogo[2][4]) && !jogo[2][0].equals("\t")) //D=E=F e !=vazio
             return true;
-        else if(jogo[4][0].equals(jogo[4][2]) && jogo[4][0].equals(jogo[4][4]) && !jogo[4][0].equals("\t")) //G=H=I e !=vazio
+        else if (jogo[4][0].equals(jogo[4][2]) && jogo[4][0].equals(jogo[4][4]) && !jogo[4][0].equals("\t")) //G=H=I e !=vazio
             return true;
-        else if(jogo[0][0].equals(jogo[2][0]) && jogo[0][0].equals(jogo[4][0]) && !jogo[0][0].equals("\t")) //A=D=G e !=vazio
+        else if (jogo[0][0].equals(jogo[2][0]) && jogo[0][0].equals(jogo[4][0]) && !jogo[0][0].equals("\t")) //A=D=G e !=vazio
             return true;
-        else if(jogo[0][2].equals(jogo[2][2]) && jogo[0][2].equals(jogo[4][2]) && !jogo[0][2].equals("\t")) //B=E=H e !=vazio
+        else if (jogo[0][2].equals(jogo[2][2]) && jogo[0][2].equals(jogo[4][2]) && !jogo[0][2].equals("\t")) //B=E=H e !=vazio
             return true;
-        else if(jogo[0][4].equals(jogo[2][4]) && jogo[0][4].equals(jogo[4][4]) && !jogo[0][4].equals("\t")) //C=F=I e !=vazio
+        else if (jogo[0][4].equals(jogo[2][4]) && jogo[0][4].equals(jogo[4][4]) && !jogo[0][4].equals("\t")) //C=F=I e !=vazio
             return true;
-        else if(jogo[0][0].equals(jogo[2][2]) && jogo[0][0].equals(jogo[4][4]) && !jogo[0][0].equals("\t")) //A=E=I e !=vazio
+        else if (jogo[0][0].equals(jogo[2][2]) && jogo[0][0].equals(jogo[4][4]) && !jogo[0][0].equals("\t")) //A=E=I e !=vazio
             return true;
-        else if(jogo[0][4].equals(jogo[2][2]) && jogo[0][4].equals(jogo[4][0]) && !jogo[0][4].equals("\t")) //C=E=G e !=vazio
+        else if (jogo[0][4].equals(jogo[2][2]) && jogo[0][4].equals(jogo[4][0]) && !jogo[0][4].equals("\t")) //C=E=G e !=vazio
             return true;
         else
             return false;
     }
+
     public static void rodarJogo(String[][] jogo, String nomePlayer1, String nomePlayer2) {
-        if(nomePlayer1.equals("") && nomePlayer2.equals("")) {
+        if (nomePlayer1.equals("") && nomePlayer2.equals("")) {
             System.out.print("Qual é o nome do primeiro jogador? ");
             nomePlayer1 = sc.next();
             System.out.print("Qual é o nome do segundo jogador? ");
@@ -130,16 +150,17 @@ public class JogoDaVelha {
                     vez = PLAYER_1;
                     vezJogador = nomePlayer1;
                 }
-                numRodada +=1;
+
+                numRodada += 1;
                 printTabuleiro(jogo);
 
-                if(numRodada>9) { //EMPATE
+                if (numRodada > 9) { //EMPATE
                     System.out.println(nomePlayer1 + " e " + nomePlayer2 + " empataram!\n" +
                             "REVANCHE? ");
                     System.out.println("\t 1 -SIM\n" +
                             "\t 2 -NÃO");
                     int revanche = sc.nextInt();
-                    if(revanche == 1)
+                    if (revanche == 1)
                         rodarJogo(jogo, nomePlayer1, nomePlayer2);
                     else {
                         System.out.println("Até logo!");
@@ -148,8 +169,10 @@ public class JogoDaVelha {
                 }
             }
         }
-        while (verificaVencedor(jogo)==false) ;
+        while (verificaVencedor(jogo) == false);
+
     }
+
     public static boolean verificaVazio(String[][] jogo, String coordenada) {
         boolean vazio = false;
         switch (coordenada) {
@@ -197,10 +220,11 @@ public class JogoDaVelha {
     }
 
 
+    private static void saudacao() {
 
-    private static void saudacao () {
         System.out.println("*** Bem vindo ao jogo da velha. Divirta-se!***");
     }
+
     private static void menu() {
         System.out.print("Você gostaria de iniciar uma partida? \n" +
                 "Digite 1 para regras; \n" +
@@ -209,9 +233,8 @@ public class JogoDaVelha {
 
 
     }
+
     private static void tabuleiroRegras() {
-
-
         String[][] tabuleiro = {{" A ", "|", " B ", "|", " C \n"},
                 {"--- ", "", "--- ", "", "---\n"},
                 {" D ", "|", " E ", "|", " F \n"},
@@ -229,6 +252,37 @@ public class JogoDaVelha {
         System.out.println("Na sua vez de jogar, você deve digitar qual letra corresponde ao espaço que você quer ocupar.\n");
     }
 
+    private static void campeao(int numRodada, String nomePlayer1, String nomePlayer2, String[][] jogo, String vencedorRodada) {
 
+
+        if (numRodada > 5 && numRodada < 9) { //vencedor
+            vencedorRodada = "";
+            verificaVencedor(jogo);
+
+        } else if (numRodada % 2 != 0) {
+
+            vencedorRodada = nomePlayer1;
+
+        } else {
+            vencedorRodada = nomePlayer2;
+        }
+        System.out.print("Vencedor da rodada:" + vencedorRodada);
+
+    }
+
+    private static void placar(int scoreUm, int scoreDois, String vencedorRodada, String nomePlayer1, String
+            nomePlayer2) {
+        int score = 0;
+
+        if (vencedorRodada == nomePlayer1) {
+            scoreUm = score += 1;
+
+        } else if (vencedorRodada == nomePlayer2) {
+            scoreDois = score += 1;
+        }
+        System.out.print("Placar:" + nomePlayer1 + ":" + scoreUm + "X" + nomePlayer2 + scoreDois);
+    }
 }
+
+
 
