@@ -1,5 +1,6 @@
 package projeto.jogo.da.velha;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class JogoDaVelha {
@@ -13,34 +14,47 @@ public class JogoDaVelha {
     public static void main(String[] args) {
         String nomePlayer1 = "";
         String nomePlayer2 = "";
-        int scoreUm = 0;
-        int scoreDois = 0;
+
 
         saudacao();
         String[][] jogo = new String[5][5];
         menu();
+        int opcao = 0;
 
-        int opcao = sc.nextInt();
         do {
-            switch (opcao) {
-                case 1:
-                    tabuleiroRegras();
-                case 2:
-                    rodarJogo(jogo, nomePlayer1, nomePlayer2);
-                    break;
-                case 3:
-                    System.out.print("Até Logo!");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Opção inválida, digite novamente:");
+            try {
+                opcao = sc.nextInt();
 
+                switch (opcao) {
+                    case 1:
+                        tabuleiroRegras();
+                        break;
+                    case 2:
+                        rodarJogo(jogo, nomePlayer1, nomePlayer2);
+                        break;
+                    case 3:
+                        System.out.print("Até Logo!");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Opção inválida, digite novamente:");
+                        sc.nextLine();
+
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.print("Caractere desconhecido, digite de novo" +
+                        "\n" +
+                        "Somente opção 1 / 2 / 3");
             }
-        } while (false);
-        sc.next();
+            sc.nextLine();
+        } while (opcao == 0);
+
 
         tabuleiro(jogo);
+
         printTabuleiro(jogo);
+
         rodarJogo(jogo, nomePlayer1, nomePlayer2);
 
     }
@@ -91,22 +105,25 @@ public class JogoDaVelha {
     }
 
     public static void rodarJogo(String[][] jogo, String nomePlayer1, String nomePlayer2) {
+
+
         if (nomePlayer1.equals("") && nomePlayer2.equals("")) {
             System.out.print("Qual é o nome do primeiro jogador? ");
             nomePlayer1 = sc.next();
             System.out.print("Qual é o nome do segundo jogador? ");
             nomePlayer2 = sc.next();
         }
+
         String vencedorRodada = "";
         int numRodada = 1;
         String vez = PLAYER_1;
         String vezJogador = nomePlayer1;
-        int scoreUm = 0;
-        int scoreDois = 0;
-        int score = 0;
+
+        boolean existeVencedor = false;
         tabuleiro(jogo);
 
         do {
+
             System.out.println("\nVez do jogador: " + vezJogador);
             System.out.println("ESCOLHA A POSIÇÃO");
             String coordenada = sc.next();
@@ -156,56 +173,55 @@ public class JogoDaVelha {
 
                 numRodada += 1;
                 printTabuleiro(jogo);
-
-
             }
 
-            if (numRodada == 6 || numRodada == 7 || numRodada == 8) { //vencedor
-                verificaVencedor(jogo);
 
-                if (vez.equals(PLAYER_1)) {
-                    vencedorRodada = nomePlayer2;
-                    System.out.print("VENCEDOR DA RODADA:" + nomePlayer2);
-                    scoreDois = score += 1;
-                } else {
-                    vencedorRodada = nomePlayer1;
-                    System.out.println("VENCEDOR DA RODADA:" + nomePlayer1);
-                    scoreUm = score += 1;
-                }
+            if (numRodada > 5) { //vencedor
+                boolean vencedor = verificaVencedor(jogo);
+                if (vencedor) {
+                    int scoreUm = 0;
+                    int scoreDois = 0;
 
-                System.out.println("PLACAR: " + nomePlayer1 + ":" + scoreUm + "  X  " + nomePlayer2 + ": " + scoreDois);
-                System.out.println("JOGAR NOVAMENTE?");
-                System.out.println("1 -PARA SIM\n" + "2 para NÃO");
-                int start = sc.nextInt();
+                    if (vez.equals(PLAYER_1)) {
+                        existeVencedor = true;
+                        System.out.print("Vencedor da rodada:" + nomePlayer2);
+                        scoreDois += 1;
 
-                if (start == 1) {
-                    rodarJogo(jogo, nomePlayer1, nomePlayer2);
-                } else
+                    } else if (vez.equals(PLAYER_2)) {
+                        existeVencedor = true;
+                        System.out.println("Vencedor da rodada:" + nomePlayer1);
+                        scoreUm += 1;
+                    }
+
+                    System.out.println("PLACAR: " + nomePlayer1 + ":" + scoreUm + "  X  " + nomePlayer2 + ": " + scoreDois);
+                    System.out.println("Jogar novamente?");
+                    System.out.println("1 - Para SIM\n" + "2 - Para NÃO");
+
+                    int start = sc.nextInt();
+                    if (start == 1) {
+                        rodarJogo(jogo, nomePlayer1, nomePlayer2);
+                    } else
+                        System.exit(0);
+
+                } else if (!vencedor && numRodada > 9) { //EMPATE
+                    existeVencedor = true;
+                    System.out.println(nomePlayer1 + " e " + nomePlayer2 + " Empataram!\n" +
+                            "Revanche? ");
+                    System.out.println("\t 1 -SIM\n" +
+                            "\t 2 -NÃO");
+                    int revanche = sc.nextInt();
+                    if (revanche == 1) {
+                        System.out.println("Legal, vamos lá!");
+                        rodarJogo(jogo, nomePlayer1, nomePlayer2);
+                    } else {
+                        System.out.println("Até logo!");
+                    }
+
                     System.exit(0);
-
-
+                }
             }
 
-
-            if (numRodada > 9) { //EMPATE
-                System.out.println(nomePlayer1 + " e " + nomePlayer2 + " EMPATARAM!\n" +
-                        "REVANCHE? ");
-                System.out.println("\t 1 -SIM\n" +
-                        "\t 2 -NÃO");
-                int revanche = sc.nextInt();
-                if (revanche == 1) {
-                    System.out.println("Legal, vamos lá!");
-                    rodarJogo(jogo, nomePlayer1, nomePlayer2);
-                } else
-                    System.out.println("Até logo!");
-                System.exit(0);
-
-            }
-
-
-        } while (verificaVencedor(jogo) == false);
-
-
+        } while (existeVencedor == false);
     }
 
     public static boolean verificaVazio(String[][] jogo, String coordenada) {
@@ -286,36 +302,6 @@ public class JogoDaVelha {
         }
         System.out.println("Na sua vez de jogar, você deve digitar qual letra corresponde ao espaço que você quer ocupar.\n");
     }
-
-//            private static void campeao ( int numRodada, String vez, String nomePlayer1, String nomePlayer2, String[][]jogo) {
-//
-//                if (numRodada == 6 || numRodada == 7 || numRodada == 8) { //vencedor
-//                    verificaVencedor(jogo);
-//                    if (vez == PLAYER_1);
-//}
-//                        System.out.print("Vencedor da rodada:" + nomePlayer2);
-//
-//                } else {
-//                    System.out.print("Vencedor da rodada:" + nomePlayer1);
-//
-//                }
-//            }
-
-    private static void placar(int score, String nomePlayer1, String nomePlayer2) {
-        String vencedorRodada = "";
-        int scoreUm = 0;
-        int scoreDois = 0;
-
-        if (vencedorRodada.equals(nomePlayer1)) {
-            scoreUm = score + 1;
-
-        } else if (vencedorRodada.equals(nomePlayer2)) {
-            scoreDois = score + 1;
-        }
-        System.out.print("Placar:" + nomePlayer1 + ":" + scoreUm + "X" + nomePlayer2 + scoreDois);
-    }
-
-
 }
 
 
