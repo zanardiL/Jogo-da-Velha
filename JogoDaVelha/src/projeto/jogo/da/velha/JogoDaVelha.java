@@ -10,7 +10,8 @@ public class JogoDaVelha {
     static Scanner sc = new Scanner(System.in);
     final static String PLAYER_1 = "\tX";
     final static String PLAYER_2 = "\tO";
-
+    static int scoreUm = 0;
+    static int scoreDois = 0;
     public static void main(String[] args) {
         String nomePlayer1 = "";
         String nomePlayer2 = "";
@@ -38,7 +39,7 @@ public class JogoDaVelha {
                         break;
                     default:
                         System.out.println("Opção inválida, digite novamente:");
-                        sc.nextLine();
+
 
                 }
 
@@ -48,7 +49,7 @@ public class JogoDaVelha {
                         "Somente opção 1 / 2 / 3");
             }
             sc.nextLine();
-        } while (opcao == 0);
+        } while (opcao <= 0 || opcao > 3);
 
 
         tabuleiro(jogo);
@@ -179,8 +180,7 @@ public class JogoDaVelha {
             if (numRodada > 5) { //vencedor
                 boolean vencedor = verificaVencedor(jogo);
                 if (vencedor) {
-                    int scoreUm = 0;
-                    int scoreDois = 0;
+
 
                     if (vez.equals(PLAYER_1)) {
                         existeVencedor = true;
@@ -281,7 +281,6 @@ public class JogoDaVelha {
                 "Digite 1 para regras; \n" +
                 "Digite 2 para iniciar o jogo;\n" +
                 "digite 3 para sair.");
-
 
     }
 
